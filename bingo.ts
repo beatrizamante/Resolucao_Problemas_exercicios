@@ -3,31 +3,33 @@ export default class Bingo {
     numbers: number[] = [];
 
     constructor() {
-        // Generate 25 unique numbers between 1 and 50
-        while (this.numbers.length < 25) {
-            const num = Math.floor(Math.random() * 50) + 1;
+        const ranges = [
+            { min: 1, max: 10 },
+            { min: 11, max: 20 },
+            { min: 21, max: 30 },
+            { min: 31, max: 40 },
+            { min: 41, max: 50 }
+        ];
 
-            // Only add number if it's not already in the array
-            if (!this.numbers.includes(num)) {
-                this.numbers.push(num);
+        for (let range of ranges) {
+            let column: number[] = [];
+            while (column.length < 5) {
+                const num = Math.floor(Math.random() * (range.max - range.min + 1)) + range.min;
+                if (!column.includes(num)) {
+                    column.push(num);
+                }
             }
+            column.sort((a, b) => a - b);  
+            this.numbers.push(...column); 
         }
-
-        let columns: number[][] = [[], [], [], [], []];
-
-        for (let i = 0; i < 25; i++) {
-            columns[i % 5].push(this.numbers[i]);
-        }
-
-        columns = columns.map(column => column.sort((a, b) => a - b));
 
         for (let i = 0; i < 5; i++) {
             this.cartela.push([
-                columns[0][i],
-                columns[1][i],
-                columns[2][i],
-                columns[3][i],
-                columns[4][i]
+                this.numbers[i],     
+                this.numbers[i + 5], 
+                this.numbers[i + 10],
+                this.numbers[i + 15],
+                this.numbers[i + 20] 
             ]);
         }
     }
